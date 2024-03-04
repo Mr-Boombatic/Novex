@@ -2,47 +2,40 @@
 
 namespace App\Controller;
 
+use ApiPlatform\OpenApi\Model\RequestBody;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use App\Entity\User;
 use OpenApi\Attributes as OA;
 
 use App\Service\UserService;
+use OpenApi\Context;
 
 class UserController extends AbstractController
 {
-    /**
-     * Создание пользователя.
-     */
-    #[OA\Response(
+    #[
+    OA\Post(
+        path: '/api/user-create',
+        summary: "Создание пользователя",
+        requestBody: new OA\RequestBody(
+            description: 'test',
+            content: new Model(type: User::class))),
+    OA\Response(
         response: 200,
-        description: 'Пользователь создан успешно',
-    )]
-    #[OA\Response(
+        description: 'Пользователь создан успешно'),   
+    OA\Response(
         response: 400,
-        description: 'Пользователь не был создан.',
-    )]
-    #[OA\Response(
+        description: 'Пользователь не был создан.'),
+    OA\Response(
         response: 500,
-        description: 'Ошибка на стороне сервера.',
-    )]
+        description: 'Ошибка на стороне сервера.')    
+    ]
+         
     #[Route('/api/user-create', name: 'app_create', methods: ['POST'], format: 'json')]
     public function createUser(
-        #[OA\RequestBody(
-            required: true,
-            description: 'Новый пользователь',
-            content: new OA\JsonContent(
-                example: '{
-                    "email": "test@example.com",
-                    "name": "Test",
-                    "age": 35,
-                    "sex": "male",
-                    "birthday": "1992-05-15",
-                    "phone": "89261234567"
-                }'
-            )
-         )] 
         Request $request, 
         UserService $userService): JsonResponse
     {
@@ -71,13 +64,42 @@ class UserController extends AbstractController
             description: 'Новый пользователь',
             content: new OA\JsonContent(
                 example: '{
-                    "id": 1
+                    "id": 1,
                     "email": "test@example.com",
                     "name": "Test",
                     "age": 35,
                     "sex": "male",
                     "birthday": "1992-05-15",
                     "phone": "89261234567"
+                }',
+                schema: '{
+                    "type": "object",
+                    "properties": {
+                        "id": {
+                            "type": "integer"
+                        },
+                        "email": {
+                            "type": "string"
+                        },
+                        "name": {
+                            "type": "string"
+                        },
+                        "age": {
+                            "type": "integer"
+                        },
+                        "sex": {
+                            "type": "string",
+                            "enum": ["male", "female"]
+                        },
+                        "birthday": {
+                            "type": "string",
+                            "format": "date"
+                        },
+                        "phone": {
+                            "type": "string"
+                        }
+                    },
+                    "required": ["id", "email", "name", "age", "sex", "birthday", "phone"]
                 }'
             )
          )] 
