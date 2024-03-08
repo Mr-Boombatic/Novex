@@ -4,6 +4,42 @@ nelmio_api_doc:
             title: NEVOX (test)
             description: This is an awesome app!
             version: 1.0.0
+        components:
+            schemas:
+                CreatingUser:
+                    type: object
+                    properties:
+                        name:
+                            type: string
+                        email:
+                            type: string
+                        age:
+                            type: integer
+                        sex:
+                            type: string
+                        birthday:
+                            type: string
+                        phone:
+                            type: string
+
+                UpdatingUser:
+                    type: object
+                    properties:
+                        id:
+                            type: integer
+                        name:
+                            type: string
+                        email:
+                            type: string
+                        age:
+                            type: integer
+                        sex:
+                            type: string
+                        birthday:
+                            type: string
+                        phone:
+                            type: string
+
     areas: # to filter documented areas
         path_patterns:
             # - ^/api(?!/doc$) # Accepts routes under /api except /api/doc
